@@ -90,6 +90,9 @@ const useStyles=makeStyles(theme =>({                                 //it takes
         marginTop:"12em",
         [theme.breakpoints.down('sm')]:{
             padding:25
+        },
+        [theme.breakpoints.down('xs')]:{
+            padding:5
         }
     },
     revolutionBackground:{
@@ -293,7 +296,7 @@ const Index=({setValue,setSelectedIndex})=> {
                     >
                         <Typography variant="h4">Website Development</Typography>
                         <Typography variant="subtitle1" className={classes.subtitle}>Reach More. Discover More. Sell More.</Typography>
-                        <Typography variant="subtitle1">Optimized for search engines, built for speed</Typography>
+                        <Typography variant="subtitle1">Optimized for search engines, {matchesXS && <br/>} built for speed</Typography>
                         <Button
                             variant="outlined"
                             component={Link}

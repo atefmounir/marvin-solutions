@@ -116,7 +116,17 @@ const CustomSoftware =({setValue,setSelectedIndex})=>{
                 </Hidden>
                 <Grid item container direction="column" className={classes.heading}>
                     <Grid item>
-                        <Typography variant="h1" align={matchesMD ? 'center' : undefined}>Custom Software Development</Typography>
+                        <Typography
+                            variant="h1"
+                            align={matchesMD ? 'center' : undefined}
+                            style={{
+                                lineHeight:matchesXS ? 1.1 :null,
+                                marginBottom:matchesXS ? '0.5em' :0,
+                                fontSize:'2.25em'
+                            }}>
+
+                            Custom Software Development
+                        </Typography>
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" paragraph align={matchesMD ? 'center' : undefined}>
@@ -225,7 +235,7 @@ const CustomSoftware =({setValue,setSelectedIndex})=>{
 
                 {/*-----Scale-----*/}
                 <Grid item container className={classes.itemContainer} direction={matchesSM ? 'column' : 'row'} md>
-                    <Grid item md>
+                    <Grid item style={{marginBottom:matchesSM ? '2em':null}} md>
                         <Lottie options={scaleOptions}
                                 style={{maxHeight:260, maxWidth:280}}
                         />
@@ -291,7 +301,7 @@ const CustomSoftware =({setValue,setSelectedIndex})=>{
                             </Typography>
                         </Grid>
                     </Grid>
-                    <Grid item md>
+                    <Grid item style={{marginTop:matchesSM ? '2em':null}} md>
                         <Lottie options={automationOptions}
                                 style={{maxHeight:290, maxWidth:280}}
                         />
@@ -300,7 +310,7 @@ const CustomSoftware =({setValue,setSelectedIndex})=>{
 
                 {/*-----user experience design-----*/}
                 <Grid item container className={classes.itemContainer} direction={matchesSM ? 'column' : 'row'} md>
-                    <Grid item md>
+                    <Grid item style={{marginBottom:matchesSM ? '2em':null}} md>
                         <Lottie options={uxOptions}
                                 style={{maxHeight:310, maxWidth:155}}
                         />

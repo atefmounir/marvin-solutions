@@ -72,8 +72,24 @@ const CallToAction =({setValue})=>{
             >
                 <Grid container direction='column'>
                     <Grid item>
-                        <Typography variant='h1'>Simple Software<br />Revolutionary Results</Typography>
-                        <Typography variant='subtitle2' style={{fontSize:'1.5rem'}}>Take advantage of the 21st Century</Typography>
+                        <Typography
+                            variant='h1'
+                            style={{lineHeight: matchesSM ? 1.1 : null}} >
+
+                            Simple Software
+                            <br />
+                            {matchesSM && <br/>}
+                            Revolutionary Results
+                        </Typography>
+
+                        <Typography
+                            variant='subtitle2'
+                            style={{fontSize: matchesSM  ? "1.2em":'1.5rem'}}
+                            gutterBottom>
+
+                            Take advantage of the 21st Century
+                        </Typography>
+
                         <Grid item>
                             <Button
                                 variant="outlined"

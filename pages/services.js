@@ -28,6 +28,9 @@ const useStyles =makeStyles(theme =>({
         marginTop:"10em",
         [theme.breakpoints.down('sm')]:{
             padding:25
+        },
+        [theme.breakpoints.down('xs')]:{
+            padding:5
         }
     },
     learnButton:{
@@ -44,7 +47,9 @@ const useStyles =makeStyles(theme =>({
 const Services=({setValue,setSelectedIndex})=> {
     const classes=useStyles()
     const theme=useTheme()
+
     const matchesSM=useMediaQuery(theme.breakpoints.down('sm'))
+    const matchesXS=useMediaQuery(theme.breakpoints.down('xs'))
 
     return (
         <Grid container
@@ -181,7 +186,7 @@ const Services=({setValue,setSelectedIndex})=> {
                     >
                         <Typography variant="h4">Website Development</Typography>
                         <Typography variant="subtitle1" className={classes.subtitle}>Reach More. Discover More. Sell More.</Typography>
-                        <Typography variant="subtitle1">Optimized for search engines, built for speed</Typography>
+                        <Typography variant="subtitle1">Optimized for search engines, {matchesXS && <br/>} built for speed</Typography>
                         <Button
                             variant="outlined"
                             component={Link}
