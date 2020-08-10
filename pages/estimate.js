@@ -1,4 +1,4 @@
-import React,{useState}  from "react";
+import React,{useState,useRef}  from "react";
 import ReactGA from 'react-ga'
 import Head from 'next/head'
 import axios from "axios";
@@ -314,6 +314,8 @@ const Estimate=()=> {
     const matchesMD = useMediaQuery(theme.breakpoints.down('md'))
     const matchesSM = useMediaQuery(theme.breakpoints.down('sm'))
 
+    const myRef=useRef(null)
+
     const [questions,setQuestions]=useState(defaultQuestions)
     const [dialogOpen,setDialogOpen]=useState(false)
     const [name,setName]=useState('')
@@ -350,7 +352,11 @@ const Estimate=()=> {
     }
 
     const nextQuestion =()=>{
-        const newQuestions=cloneDeep(questions)                               //take a copy from the defaultQuestions array of objects which stored in the state questions
+        if(matchesSM){                                                         //useRef only on mobile screen
+            window.scrollTo(0,myRef.current.offsetTop+75)              //myRef assigned to the question title which we need to scroll to
+        }
+
+        const newQuestions=cloneDeep(questions)                        //take a copy from the defaultQuestions array of objects which stored in the state questions
 
         const currentlyActive=newQuestions.filter(question =>question.active) //will hold the currently active question. filter method is returning an array
         const activeIndex=currentlyActive[0].id-1                             //get the first element in the filtered array. then refer to contained object by selecting its index=id-1
@@ -359,11 +365,15 @@ const Estimate=()=> {
         newQuestions[activeIndex]={...currentlyActive[0],active: false}       //update the active field of the current active question to false
         newQuestions[nextIndex]={...newQuestions[nextIndex],active: true}     //update the active field of the next question to true
 
-        setQuestions(newQuestions)                                            //set the state of questions with the modified newQuestions
+        setQuestions(newQuestions)                                    //set the state of questions with the modified newQuestions
     }
 
     const previousQuestion =()=>{
-        const newQuestions=cloneDeep(questions)                               //take a copy from the defaultQuestions array of objects which stored in the state questions
+        if(matchesSM){                                                         //useRef only on mobile screen
+            window.scrollTo(0,myRef.current.offsetTop+75)              //myRef assigned to the question title which we need to scroll to
+        }
+
+        const newQuestions=cloneDeep(questions)                        //take a copy from the defaultQuestions array of objects which stored in the state questions
 
         const currentlyActive=newQuestions.filter(question =>question.active) //will hold the currently active question. filter method is returning an array
         const activeIndex=currentlyActive[0].id-1                             //get the first element in the filtered array. then refer to contained object by selecting its index=id-1
@@ -388,12 +398,12 @@ const Estimate=()=> {
     }
 
     const handleSelect =(id)=>{
-        const newQuestions=cloneDeep(questions)                               //copy the questions state "softwareQuestions" using lodash cloneDeep method
+        const newQuestions=cloneDeep(questions)                       //copy the questions state "softwareQuestions" using lodash cloneDeep method
 
         const currentlyActive=newQuestions.filter(question =>question.active) //will hold the currently active question. filter method is returning an array
         const activeIndex=currentlyActive[0].id-1                             //get the first element in the filtered array. then refer to contained object by selecting its index=id-1
 
-        const newSelected=newQuestions[activeIndex].options[id-1]             //id of options get from calling of handleSelectedQuestion. saving to newSelected is same as saving a copy of {...}
+        const newSelected=newQuestions[activeIndex].options[id-1]             //id of options get from calling of handleSelect. saving to newSelected is same as saving a copy of {...}
         const previousSelected=currentlyActive[0].options
             .filter(option => option.selected)                                //memorizing any selection from the user and save it into previousSelected array
 
@@ -413,6 +423,10 @@ const Estimate=()=> {
 
         switch(newSelected.title) {                                           //at beginning, newSelected=newQuestions[activeIndex] without options
             case 'Custom Software Development':
+                if(matchesSM){                                                //useRef only on mobile screen
+                    window.scrollTo(0,myRef.current.offsetTop+75)     //myRef assigned to the question title which we need to scroll to
+                }
+
                 setQuestions(softwareQuestions)
                 setService(newSelected.title)
                 setPlatforms([])                                      //clear out any previous selected options
@@ -422,6 +436,9 @@ const Estimate=()=> {
                 setUsers('')
                 break
             case 'IOS/Android App Development':
+                if(matchesSM){                                                //useRef only on mobile screen
+                    window.scrollTo(0,myRef.current.offsetTop+75)      //myRef assigned to the question title which we need to scroll to
+                }
                 setQuestions(softwareQuestions)
                 setService(newSelected.title)
                 setPlatforms([])                                      //clear out any previous selected options
@@ -431,6 +448,10 @@ const Estimate=()=> {
                 setUsers('')
                 break
             case 'Website Development':
+                if(matchesSM){                                                //useRef only on mobile screen
+                    window.scrollTo(0,myRef.current.offsetTop+75)     //myRef assigned to the question title which we need to scroll to
+                }
+
                 setQuestions(websiteQuestions)
                 setService(newSelected.title)
                 setPlatforms([])                                      //clear out any previous selected options
@@ -441,7 +462,7 @@ const Estimate=()=> {
                 break
 
             default:
-                setQuestions(newQuestions)                                    //newQuestions is holding the initial state = defaultQuestions
+                setQuestions(newQuestions)                            //newQuestions is holding the initial state = defaultQuestions
         }
     }
 
@@ -627,8 +648,7 @@ const Estimate=()=> {
        return disabled
     }
 
-    const softwareSelections =(
-        <Grid container direction='column'>
+    const softwareSelections =(<Grid container direction='column'>
             <Grid item container alignItems='center' style={{marginBottom:'1.25em'}}>
                 <Grid item xs={2}>
                     <img src='/assets/check.svg' alt='checkmark'/>
@@ -717,11 +737,9 @@ const Estimate=()=> {
                     </Typography>
                 </Grid>
             </Grid>
-        </Grid>
-    )
+        </Grid>)
 
-    const websiteSelection =(
-        <Grid container direction='column' style={{marginTop:'14em'}}>
+    const websiteSelection =(<Grid container direction='column' style={{marginTop:'14em'}}>
             <Grid item container alignItems='center'>
                 <Grid item xs={2}>
                     <img src='/assets/check.svg' alt='checkmark'/>
@@ -732,8 +750,7 @@ const Estimate=()=> {
                     </Typography>
                 </Grid>
             </Grid>
-        </Grid>
-    )
+        </Grid>)
 
     return(
         <Grid container direction="row">
@@ -780,7 +797,7 @@ const Estimate=()=> {
                         <React.Fragment key={index}>
 
                             {/*-----question ----*/}
-                            <Grid item>
+                            <Grid item ref={myRef}>
                                 <Typography
                                     variant='h1'
                                     align='center'
