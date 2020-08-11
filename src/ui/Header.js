@@ -8,7 +8,6 @@ import Tabs from "@material-ui/core/Tabs";                                   //T
 import Tab from "@material-ui/core/Tab";                                     //Tab component
 import Button from "@material-ui/core/Button";                               //Button component
 import Link from '../Link'                                                   //for Tab link
-import Menu from "@material-ui/core/Menu";                                   //Menu component
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";             //drawer component
 import IconButton from "@material-ui/core/IconButton"                        //IconButton component
 import MenuIcon from '@material-ui/icons/Menu'                               //MenuIcon component
@@ -22,6 +21,11 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Grid from '@material-ui/core/Grid'
 
 
 
@@ -130,15 +134,39 @@ const useStyles=makeStyles(theme=>({                                 //API hook 
     },
     appBar:{
         zIndex:theme.zIndex.modal+1
+    },
+    expansion:{
+        backgroundColor:theme.palette.common.blue,
+        borderBottom:'1px solid rgba(0, 0, 0, 0.12)',              //copied from the other list item css properties
+        "&.Mui-expanded":{
+            margin:0,
+            borderBottom:0
+        },
+        "&::before":{
+            backgroundColor:'rgba(0,0,0,0)'
+        }
+    },
+    expansionDetails:{
+        padding:0,
+        backgroundColor:theme.palette.primary.light,
+    },
+    expansionSummary:{
+        padding:'0 24px 0 16px',
+        "&:hover":{
+            backgroundColor:'rgba(0,0,0,0.08)'
+        },
+        backgroundColor:({value})=>value===1 ? 'rgba(0,0,0,0.14)':'inherit'
     }
 }))                           //JSS Styles
 
 
 
-const Header=({value,setValue,selectedIndex,setSelectedIndex})=>{
-    const classes=useStyles()                                                //for JSS styling
-    const iOS =
-        process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);     //checks the IOS user. from documentation "drawers section"
+const Header=(props)=>{
+    const {value,setValue,selectedIndex,setSelectedIndex}=props
+
+    const classes=useStyles(props)                                                              //useStyles can have access to props to execute functions
+
+    const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);               //checks the IOS user. from documentation "drawers section"
 
 
     const [anchorEl,setAnchorEl]=useState(null)               //hoc for Menu"
@@ -284,7 +312,7 @@ const Header=({value,setValue,selectedIndex,setSelectedIndex})=>{
                                         {
                                             menuOptions.map(({name,link}, index) =>(
                                                 <MenuItem
-                                                    key={name}
+                                                    key={index}
                                                     component={Link}
                                                     href={link}
                                                     onClick={(event)=>{
@@ -337,26 +365,88 @@ const Header=({value,setValue,selectedIndex,setSelectedIndex})=>{
             >
                 <div className={classes.toolBarMargin}/>
                 <List disablePadding>
-
                     {
-                        routes.map(({name,link,activeIndex})=>(
+                        routes.map(route =>route.name==='Services' ? (
+                            <Accordion
+                                elevation={0}
+                                key={route.name}
+                                classes={{root:classes.expansion}}
+                            >
+                                <AccordionSummary
+                                    classes={{root:classes.expansionSummary}}
+                                    expandIcon={<ExpandMoreIcon color='secondary'/>}
+                                >
+                                    <ListItemText
+                                        disableTypography
+                                        className={classes.drawerItem}
+                                        style={{opacity: value === 1 ? 1 :null}}
+                                    >
+                                        <Link
+                                            href={route.link}
+                                            color='inherit'
+                                            onClick={()=>{setOpenDrawer(false)}}
+                                        >
+                                            {route.name}
+                                        </Link>
+                                    </ListItemText>
+                                </AccordionSummary>
+
+                                <AccordionDetails
+                                    classes={{root:classes.expansionDetails}}
+                                >
+                                    <Grid container direction='column'>
+                                        {
+                                            menuOptions.map(route =>(
+                                                <Grid item>
+                                                    <ListItem
+                                                        key={route.selectedIndex}
+                                                        divider button
+                                                        component={Link}
+                                                        href={route.link}
+                                                        selected={value===1 && route.selectedIndex===selectedIndex &&window.location.pathname !=='/services'}
+                                                        classes={{selected:classes.drawerItemSelected}}
+                                                        onClick={()=>{
+                                                            setOpenDrawer(false)
+                                                            setSelectedIndex(route.selectedIndex)
+                                                        }}
+                                                    >
+                                                        <ListItemText
+                                                            disableTypography
+                                                            className={classes.drawerItem}
+                                                            onClick={()=>{
+                                                                setOpenDrawer(false)
+                                                                setValue(route.activeIndex)
+                                                            }}
+                                                        >
+                                                                {route.name.split(' ').filter(word=>word !=='Development').join(' ')}
+                                                                <br/>
+                                                                <span style={{fontSize:'0.75rem'}}>Development</span>
+                                                        </ListItemText>
+                                                    </ListItem>
+                                                </Grid>
+                                            ))
+                                        }
+                                    </Grid>
+                                </AccordionDetails>
+                            </Accordion>
+                        ) :(
                             <ListItem
-                                key={activeIndex}
+                                key={route.activeIndex}
                                 onClick={()=>{
                                     setOpenDrawer(false)
-                                    setValue(activeIndex)
+                                    setValue(route.activeIndex)
                                 }}
                                 divider button
                                 component={Link}
-                                href={link}
-                                selected={value===activeIndex}
+                                href={route.link}
+                                selected={value===route.activeIndex}
                                 classes={{selected:classes.drawerItemSelected}}
                             >
                                 <ListItemText
                                     disableTypography
                                     className={classes.drawerItem}
                                 >
-                                    {name}
+                                    {route.name}
                                 </ListItemText>
                             </ListItem>
                         ))
@@ -384,7 +474,6 @@ const Header=({value,setValue,selectedIndex,setSelectedIndex})=>{
                             Free Estimate
                         </ListItemText>
                     </ListItem>
-
                 </List>
             </SwipeableDrawer>
             <IconButton
