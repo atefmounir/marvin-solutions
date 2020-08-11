@@ -16,6 +16,8 @@ import ButtonArrow from "../src/ui/ButtonArrow";
 
 import animationData from '../src/animations/landinganimation/data'
 
+import {LazyLoadImage,LazyLoadComponent} from 'react-lazy-load-image-component'
+
 
 
 const useStyles=makeStyles(theme =>({                                 //it takes theme prop of the ThemeProvider defined in App.js and return a new style object
@@ -118,6 +120,8 @@ const useStyles=makeStyles(theme =>({                                 //it takes
         }
     },
     infoBackground:{
+        position:"absolute",
+        zIndex:-1,
         backgroundImage: `url('/assets/infoBackground.svg')`,
         backgroundPosition:"center",
         backgroundSize:'cover',
@@ -241,7 +245,7 @@ const Index=({setValue,setSelectedIndex})=> {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <img className={classes.icon} alt="custom software icon" src='/assets/customSoftware.svg'/>
+                        <LazyLoadImage className={classes.icon} alt="custom software icon" src='/assets/customSoftware.svg'/>
                     </Grid>
                 </Grid>
             </Grid> {/*-----end of Custom Software Block-----*/}
@@ -279,7 +283,7 @@ const Index=({setValue,setSelectedIndex})=> {
                               marginRight:matchesSM ? 0 : '5em'
                           }}
                     >
-                        <img className={classes.icon} alt="mobile phone icon" src='/assets/mobileIcon.svg'/>
+                        <LazyLoadImage className={classes.icon} alt="mobile phone icon" src='/assets/mobileIcon.svg'/>
                     </Grid>
                 </Grid>
             </Grid> {/*-----end of IOS/Android Block-----*/}
@@ -311,7 +315,7 @@ const Index=({setValue,setSelectedIndex})=> {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <img className={classes.icon} alt="website icon" src='/assets/websiteIcon.svg'/>
+                        <LazyLoadImage className={classes.icon} alt="website icon" src='/assets/websiteIcon.svg'/>
                     </Grid>
                 </Grid>
             </Grid> {/*-----end of Websites Block-----*/}
@@ -344,14 +348,18 @@ const Index=({setValue,setSelectedIndex})=> {
                             </Grid>
                         </CardContent>
                     </Card>
-                    <div className={classes.revolutionBackground}/>
+
+                    <LazyLoadComponent threshold={850}>
+                        <div className={classes.revolutionBackground}/>
+                    </LazyLoadComponent>
+
                 </Grid>
             </Grid> {/*-----end of Revolution Block-----*/}
 
             <Grid item>
                 {" "}
                 {/*-----Information Block-----*/}
-                <Grid container direction="row" alignItems="center" style={{height:'80em'}} className={classes.infoBackground}>
+                <Grid container direction="row" alignItems="center" style={{height:'55em'}}>
                     <Grid container
                           style={{textAlign:matchesXS ? 'center':'inherit'}}
                           direction={matchesXS ? 'column' : 'row'}
@@ -397,13 +405,18 @@ const Index=({setValue,setSelectedIndex})=> {
                             </Grid>
                         </Grid>
                     </Grid>
+                    <LazyLoadComponent threshold={700}>
+                        <div className={classes.infoBackground}/>
+                    </LazyLoadComponent>
                 </Grid>
             </Grid> {/*-----end of Information Block-----*/}
 
             <Grid item>
                 {' '}
                 {/*-----Call To Action Block-----*/}
-                <CallToAction setValue={setValue} />
+                <LazyLoadComponent threshold={700}>
+                    <CallToAction setValue={setValue} />
+                </LazyLoadComponent>
             </Grid> {/*-----end of Call To Action Block-----*/}
 
         </Grid>

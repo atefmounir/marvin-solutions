@@ -8,6 +8,8 @@ import Header from '../src/ui/Header'
 import Footer from '../src/ui/Footer'
 import Fonts from "../src/ui/Fonts";
 
+import {LazyLoadComponent} from 'react-lazy-load-image-component'
+
 ReactGA.initialize("UA-174571449-1")                        //tracking code from adding our production website into google analytics
 
 export default function MyApp(props) {
@@ -43,9 +45,11 @@ export default function MyApp(props) {
                    {...pageProps}
         />
 
-        <Footer setValue={setValue}
-                setSelectedIndex={setSelectedIndex}
-        />
+        <LazyLoadComponent threshold={400}>
+          <Footer setValue={setValue}
+                  setSelectedIndex={setSelectedIndex}
+          />
+        </LazyLoadComponent>
       </ThemeProvider>
     </React.Fragment>
   );
