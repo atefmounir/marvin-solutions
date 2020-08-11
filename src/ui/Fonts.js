@@ -9,19 +9,16 @@ const Fonts = () => {
   document.head.appendChild(link);
 
   const roboto = new FontFaceObserver("Roboto");
-
   roboto.load().then(() => {
     document.documentElement.classList.add("roboto");
   });
 
   const pacifico = new FontFaceObserver("Pacifico");
-
   pacifico.load().then(() => {
     document.documentElement.classList.add("pacifico");
   });
 
   const raleway = new FontFaceObserver("Raleway");
-
   raleway.load().then(() => {
     document.documentElement.classList.add("raleway");
   });
