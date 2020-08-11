@@ -437,7 +437,6 @@ export default function Revolution(props) {
                 })
             }
 
-
             <Grid item>
                 <CallToAction setValue={props.setValue} />
             </Grid>
